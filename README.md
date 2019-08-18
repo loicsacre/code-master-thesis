@@ -1,9 +1,9 @@
 # Code of Loïc Sacré's master thesis
 
 :exclamation: 
-    - The code works with Python3 only
-    - Call all the processes from the root of the project
-    - Require the Cytomine client and utilities in Python (https://github.com/cytomine/Cytomine-python-client)
+- The code works with Python3 only
+- Call all the processes from the root of the project
+- Require the Cytomine client and utilities in Python (https://github.com/cytomine/Cytomine-python-client)
 
 ## Init
 
@@ -34,7 +34,7 @@ or follow all these steps:
     - They will be stored automatically in 'datasets/patches/{size}' (where size is the size of the patches)
         - Note that you can change the path in 'path/path' (or give in as an argument, not recommended)
 - Generate the dataset by running the file 'generate_dataset.py' (specifying the size)
-- For the Alan-cluster: Put the patches in the scratch folder to speed-up the training
+- For the Alan-cluster: put the patches in the scratch folder to speed-up the training (with the use of 'copy.sh')
 
 ## ImageNet
 

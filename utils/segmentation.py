@@ -15,7 +15,7 @@ PIL.Image.MAX_IMAGE_PIXELS = 933120000
 """
 coordinates : (x, y) (PIL convention) as the coordinates of the landmarks
 
-(0,0)    ----  (w-1, 0) 
+(0,0)    ----  (w-1, 0)
   |                |
   |                |
   |                |
@@ -88,7 +88,7 @@ def get_coordinates_after_rotation(position, angle, original_size, new_size=None
     for i in range(2):
         position[i] -= original_size[i]/2
     new_position = R.dot(position.T)
-    
+
     for i in range(2):
         new_position[i] += original_size[i]/2
         if expand:
@@ -148,16 +148,11 @@ def segment_image(filename=None, img=None, size=300, shift=None, transpose=None)
             if not(patch.mean() > 210 and patch.std() < 6):
 
                 center = (x_min + size//2, y_min + size//2)
-                ((x_min, y_min), (x_max, y_max)) = xy
                 patches.append((xy, center, patch))
-
-            # TODO: remove
-            # if len(patches) > 7:
-            #     return patches
 
     if filename is not None:
         img.close()
-    print("--> number of accepted patches:", len(patches))
+    print("## number of accepted patches:", len(patches))
 
     return patches
 
@@ -318,7 +313,6 @@ class Divider():
                 self.x_min += self.shift
                 if self.x_max < self.x_min:
                     self.stop = True
-                    # print("COUNTER", self.counter, patch_found)
                     return None
 
                 self.y_min = 0
@@ -326,5 +320,4 @@ class Divider():
             if patch_found:
                 break
 
-        # print("Yeah", self.number_of_patches, self.x_min, self.x_max, self.y_min, self.y_max, self.stop)
         return patch

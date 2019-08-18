@@ -29,6 +29,7 @@ from utils import mkdir
 
 DEBUGGING = False
 
+
 class Config():
 
     learning_rate = 0.01
@@ -141,7 +142,8 @@ def train(model, filename, info, checkpoint=None):
     if torch.cuda.is_available():
         print("## CUDA available")
         print(f"Current device: {torch.cuda.current_device()}")
-        print(f"Device name: {torch.cuda.get_device_name(torch.cuda.current_device())}")
+        print(
+            f"Device name: {torch.cuda.get_device_name(torch.cuda.current_device())}")
 
     criterion = nn.BCELoss()  # Binary Cross Entropy Loss
 
@@ -459,7 +461,7 @@ def evaluate(model, filename_checkpoint, dataloader=None, testing=False):
 
         plt.plot(
             fpr, tpr, label=f"{args.arch} ({fpr95}% - {roc_auc})")
-        
+
         plt.xlabel('False positive rate')
         plt.ylabel('True positive rate')
         plt.title('ROC curve')
@@ -468,7 +470,8 @@ def evaluate(model, filename_checkpoint, dataloader=None, testing=False):
         out_fig = f"{get_ouput_dir_fig(testing)}/ROC"
 
         mkdir(out_fig)
-        filename = out_fig + "/" + filename_checkpoint.split("/")[-1].rsplit(".", 1)[0]
+        filename = out_fig + "/" + \
+            filename_checkpoint.split("/")[-1].rsplit(".", 1)[0]
 
         plt.savefig(filename + f"-ROC-{dataset_type}.png")
         plt.savefig(filename + f"-ROC-{dataset_type}.eps")
@@ -494,7 +497,8 @@ def get_args():
 
     parser.add_argument("--arch", dest='arch',
                         default='matchnet',
-                        choices=["matchnet", "transferAlexnet", "transferVggnet"],
+                        choices=["matchnet", "transferAlexnet",
+                                 "transferVggnet"],
                         help="model architecture: \
                               matchnet (MatchNet) | \
                               transferAlexnet (TransferAlexNet) | \
@@ -600,13 +604,14 @@ def main():
         "config": list(config_dict.items())
     }
 
-    output_dir_checkpoint = os.path.join(args.output_dir, args.arch, "checkpoints")
+    output_dir_checkpoint = os.path.join(
+        args.output_dir, args.arch, "checkpoints")
     mkdir(output_dir_checkpoint)
     filename_checkpoint = f"{output_dir_checkpoint}/{get_prefix_file()}.check"
 
     # Training
     checkpoint = None
-    
+
     if not args.testing:
 
         # Set training mode
@@ -623,8 +628,10 @@ def main():
                 if torch.cuda.is_available():
                     checkpoint = torch.load(args.checkpoint)
                 else:
-                    checkpoint = torch.load(args.checkpoint, map_location='cpu')
-                print(f"=> loaded checkpoint '{args.checkpoint}' (epoch {checkpoint['epoch']})\n")
+                    checkpoint = torch.load(
+                        args.checkpoint, map_location='cpu')
+                print(
+                    f"=> loaded checkpoint '{args.checkpoint}' (epoch {checkpoint['epoch']})\n")
             else:
                 print(f"=> no checkpoint found for '{args.checkpoint}'\n")
                 return
@@ -633,45 +640,6 @@ def main():
             train(model, filename_checkpoint, info)
         else:
             train(model, filename_checkpoint, info, checkpoint)
-
-    # Testing
-    # else:
-    #     if os.path.isfile(args.checkpoint):
-    #         evaluate(model, args.checkpoint, testing=True)
-    #     else:
-    #         print("Checkpoint does not exist..")
-
-    # else:
-    #     if os.path.isfile(args.checkpoint):
-    #         evaluate(model, args.checkpoint)
-    #     else:
-    #         print("Checkpoint does not exist..")
-
-    
-    # TODO: remove
-    if torch.cuda.is_available():
-        checkpoint = torch.load(args.checkpoint)
-    else:
-        checkpoint = torch.load(
-            args.checkpoint, map_location='cpu')
-
-    start_epoch = checkpoint['epoch']
-    model.load_state_dict(checkpoint['state_dict'])
-    counter = checkpoint['counter']
-    loss_history = checkpoint['loss_history']
-    iteration_number = [counter[0][-1], counter[1][-1]]
-    epoch_history = checkpoint['epoch_history']
-    time_elapsed = checkpoint['time']
-    train_loss_history = checkpoint['train_loss_history']
-    val_loss_history = checkpoint['val_loss_history']
-
-    print(start_epoch)
-    print(len(loss_history))
-    print(len(train_loss_history))
-    # plot_train_val_loss(train_loss_history, val_loss_history,
-    #                         start_epoch - 7)
-
-    # save_plot_iteration_loss(counter, loss_history)
 
 
 if __name__ == "__main__":

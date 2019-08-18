@@ -111,38 +111,3 @@ class MatchNetEval(MatchNet):
                       dim=1)
 
         return self.classifier(x)[:, 1]
-
-
-
-# TODO: remove
-# size = 64
-# ch_in = 1
-# a = torch.rand((1, 1, ch_in, size, size))
-# b = torch.rand((1, ch_in, size, size))
-# c = torch.rand((1, ch_in, size, size))
-
-# # c = torch.cat((a, b), dim=1)
-# # print(c.size())
-# model = MatchNetEval()
-# # r = model(c)
-
-# # # a = torch.rand((4, ch_in, size, size))
-# # # model = FeaturesNet()
-# # # r = model(a)
-
-# # print(r.size())
-
-# m = torch.cat([a, a], dim=0)
-# model.set_reference(m[0])
-
-# model.forward_with_reference(c, 0)
-# model.forward_with_reference(b, 1)
-# model.forward_with_reference(b, 2)
-# model.forward_with_reference(c, 0)
-
-
-# # from time import time 
-# # start_time = time()
-# # for i in range(300):
-# #     model.forward_with_reference(b, 0)
-# # print(time()-start_time)

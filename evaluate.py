@@ -1,34 +1,26 @@
 """Evaluate the performance of trained models on the testing set"""
 
 import csv
-import errno
 import gc
-import math
 import os
 import pickle
-import sys
-import time
 from argparse import ArgumentParser
 from time import time
 
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from PIL import Image
 from tabulate import tabulate
 from torch.autograd import Variable
+from torchvision import transforms
 
-from training_tools import AdaptiveTransformation
-from matchnet.models import (MatchNetEval, TransferAlexNetEval, TransferVGGNetEval, transform_matchnet,
+from matchnet.models import (MatchNetEval, TransferAlexNetEval,
+                             TransferVGGNetEval, transform_matchnet,
                              transform_transfernet)
 from siamese.models import SiameseAlexNetEval
-
-from path import Paths
-from utils import (FeaturesExtractor, Normalizer, compare, euclidean_distance,
-                   get_patches_from_landmarks, get_position_landmarks, mkdir,
-                   segment_image)
-
-from torchvision import transforms
+from training_tools import AdaptiveTransformation
+from utils import (euclidean_distance, get_patches_from_landmarks,
+                   get_position_landmarks, mkdir, segment_image)
 
 
 def get_pairs():
@@ -47,7 +39,7 @@ def get_pairs():
     with open(pairs_filename, 'rb') as output_file:
         pairs_data = pickle.load(output_file)
 
-    for i, (tissue, dye1, dye2, images_path, original_name1, original_name2, extension) in enumerate(pairs_data):
+    for (tissue, dye1, dye2, images_path, original_name1, original_name2, extension) in pairs_data:
 
         if (tissue, dye1, dye2) in samples_eval_set or (tissue, dye2, dye1) in samples_eval_set:
 
@@ -83,8 +75,6 @@ def compare_with_model(model, patches_img1, patches_img2, tissue, dye1, dye2):
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     print(f"## Device used: {device}", flush=True)
     print(f"Evaluating", not model.training)
-    # model.to(device)
-    # model.eval()
 
     start_time = time()
 
@@ -203,8 +193,6 @@ def main():
             checkpoint = torch.load(
                 args.checkpoint, map_location='cpu')
         print(f"## Loaded checkpoint '{args.checkpoint}'\n", flush=True)
-        # assert(checkpoint["info"]["args"]["arch"] == args.arch)
-        # TODO: uncomment
     else:
         print(f"## No checkpoint found for '{args.checkpoint}'\n", flush=True)
         return
@@ -213,8 +201,6 @@ def main():
     model.load_state_dict(checkpoint['state_dict'])
 
     pairs = get_pairs()
-    # TODO: remove
-    pairs.reverse()
 
     total_counter = [0]*2
     total_nb_of_landmarks = 0
@@ -273,23 +259,22 @@ def main():
             del patches_img2
             gc.collect()
 
-            # TODO: modify
             state = {
                 "time_comparison": time_comparison,
                 "results_comparison": results_comparison
             }
 
             with open(output_comparison, "wb") as output_file:
-                pickle.dump(results_comparison, output_file)
+                pickle.dump(state, output_file)
         else:
             print("## File exists", flush=True)
             nb_of_landmarks = len(get_patches_from_landmarks(
                 tissue, original_name1, size=args.size))
 
             with open(output_comparison, "rb") as output_file:
-                results_comparison = pickle.load(output_file)
+                state = pickle.load(output_file)
 
-            # results_comparison = state["results_comparison"]
+            results_comparison = state["results_comparison"]
 
             center_patches_img2 = [x[1] for x in segment_image(filename=os.path.join(
                 images_path, original_name2 + extension), size=args.size, shift=args.shift)]
@@ -346,10 +331,6 @@ def main():
 
         csv_row.append([tissue, dye1, dye2, round(
             counter[0]/nb_of_landmarks, 4), round(counter[1]/nb_of_landmarks, 4)])
-
-        # TODO: remove
-        # if i == 0:
-        #     break
 
     print(f"Total top-1: {total_counter[0]/total_nb_of_landmarks}", flush=True)
     print(f"Total top-5: {total_counter[1]/total_nb_of_landmarks}", flush=True)

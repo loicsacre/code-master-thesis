@@ -15,9 +15,6 @@ transform_composition = []
 transform_composition.append(transforms.Grayscale(
     num_output_channels=num_output_channels))
 transform_composition.append(transforms.ToTensor())
-# TODO: Normalize like imagenet or matchnet ??
-# transform_composition.append(transforms.Normalize(
-#     [0.5]*num_output_channels, [0.625]*num_output_channels))
 transforms.Normalize(mean=[0.485, 0.456, 0.406],
                      std=[0.229, 0.224, 0.225])
 transform_transfernet = transforms.Compose(transform_composition)

@@ -7,11 +7,6 @@
 import torch
 import torch.nn as nn
 import torchvision.models as models
-from torchvision import transforms
-import numpy as np
-
-from utils import euclidean_distance
-
 
 # TODO: adapt like matchnet/models/transfernet, use inheritance
 
@@ -22,10 +17,6 @@ class SiameseAlexNet(nn.Module):
         self.reference = None
 
         self.features = models.__dict__["alexnet"](pretrained=False).features
-
-        # Freeze feature model weights
-        # for param in self.features.parameters():
-        #     param.requires_grad = False
 
         self.down = self.conv(256, 128)
         self.avgpool = nn.AdaptiveAvgPool2d(8)
@@ -90,24 +81,3 @@ class SiameseAlexNetEval(SiameseAlexNet):
         features = torch.unsqueeze(self.target_cache[i], dim=0)
 
         return (self.reference-features).pow(2).sum(1)
-
-
-# TODO: remove
-# size = 300
-# a = torch.rand((1, 1, 3, size, size))
-# b = torch.rand((1, 1, 3, size, size))
-
-# model = SiameseAlexNetEval()
-# checkpoint = torch.load("/Users/loicsacre/master-thesis/main/results/siameseAlexnet_0.01_0.9_64-1205599.check", map_location='cpu')
-# model.load_state_dict(checkpoint['state_dict'])
-# print(model.down[0].weight)
-
-# model.set_reference(a)
-# out = model.forward_with_reference(b, 0)
-# out = model.forward_with_reference(b, 1)
-# out = model.forward_with_reference(b, 3)
-# out = model.forward_with_reference(b, 0)
-
-
-# # out = model(a)
-# print(out.size())

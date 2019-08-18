@@ -9,58 +9,6 @@ from PIL import Image
 from path import Paths
 from utils import FeaturesExtractor, Normalizer, get_patches_from_landmarks
 
-# TODO: remove
-# def get_features(arch, size, path_to_patches, pooling=True):
-
-#     print("## Starting extracting features...")
-#     if pooling:
-#         print("## Using pooling..")
-#     else:
-#         print("## Not using pooling..")
-
-#     # Declare the features  extractor
-#     extractor = FeaturesExtractor(arch)
-
-#     starting = time.time()
-
-#     walk_path = iter(os.walk(path_to_patches))
-#     next(walk_path)
-
-#     results_features = dict()
-
-#     normalizer = Normalizer()
-
-#     for root, dirs, files in walk_path:
-
-#         if not dirs:
-
-#             tissue = root.split('/')[-2]
-#             dye = root.split('/')[-1]
-
-#             if tissue not in results_features:
-#                 results_features[tissue] = dict()
-#             if dye not in results_features[tissue]:
-#                 results_features[tissue][dye] = dict()
-
-#             for landmark_nb, f in enumerate(files):
-
-#                 img = Image.open(os.path.join(root, f))
-
-#                 normalize = normalizer.get(tissue, dye)
-#                 extractor.set_normalize(normalize)
-#                 features = extractor.get_features_from_img(img, size, pooling).cpu().numpy()
-
-#                 if landmark_nb == 0:
-#                     results_features[tissue][dye] = np.zeros((len(files), features.shape[0]))
-
-#                 results_features[tissue][dye][landmark_nb] = features
-#                 img.close()
-
-#     print("   Elapsed time : {}".format(time.time() - starting))
-
-#     return results_features
-
-
 def get_features(arch, size, pooling=True):
 
     print("## Starting extracting features...")

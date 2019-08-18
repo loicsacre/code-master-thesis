@@ -8,7 +8,7 @@ Tissue
     |----- Dye
             |----- Landmark Number(.format)
 
-E.g. 
+E.g.
 
 COAD_1
     |----- S1
@@ -48,7 +48,6 @@ from argparse import ArgumentParser
 
 import os
 import csv
-import numpy as np
 
 from cytomine import Cytomine
 from cytomine.models import AnnotationCollection, Annotation, PropertyCollection, Property

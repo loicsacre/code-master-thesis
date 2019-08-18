@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """
-Get the all the info from a project 
+Get the all the info from a project
 
-If the images were uploaded to the project with the following format 'tissue&scale&original_name' 
+If the images were uploaded to the project with the following format 'tissue&scale&original_name'
 Note that the images from  https://anhir.grand-challenge.org/Download/ are stored like : tissue/scale/original_name.ext (where ext is either jpg or png)
 """
 
@@ -30,7 +30,6 @@ import logging
 import sys
 from argparse import ArgumentParser
 
-import os
 import csv
 from path import Paths
 
@@ -75,7 +74,6 @@ if __name__ == '__main__':
         image_instances = ImageInstanceCollection(
         ).fetch_with_filter("project", params.id_project)
 
-
         with open('./info/project-info.csv', mode='w') as csv_file:
 
             fieldnames = ['Image ID', 'Tissue', 'Dye', 'Height', 'Width', 'Number of Landmarks',
@@ -97,7 +95,7 @@ if __name__ == '__main__':
 
                 image.filename : /1566135909799/lung-lobes_3&scale-100pc&29-040-U-35W-Izd1-4-cc10_pyr.tif
 
-                original_name : 29-041-Izd2-w35-Ki67-7-les2 
+                original_name : 29-041-Izd2-w35-Ki67-7-les2
                 tissue : lung-lesion_2
                 dye : KI67
                 scale : scale-25pc

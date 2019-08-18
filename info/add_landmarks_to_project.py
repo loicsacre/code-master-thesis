@@ -23,11 +23,10 @@ import os
 import sys
 from argparse import ArgumentParser
 
-from shapely.geometry import Point, box
+from shapely.geometry import Point
 
 from cytomine import Cytomine
-from cytomine.models import (Annotation, AnnotationCollection, AnnotationTerm,
-                             Property)
+from cytomine.models import (Annotation, AnnotationCollection)
 from path import Paths
 
 __author__ = "Rubens Ulysse <urubens@uliege.be>"  # modified by Loic Sacre
@@ -80,12 +79,12 @@ if __name__ == '__main__':
                     headers = next(f_csv)
                     annotations = AnnotationCollection()
 
-                    for row in f_csv:
+                    for row_landmarks in f_csv:
 
-                        id_landmark = int(row[0])
+                        id_landmark = int(row_landmarks[0])
 
                         # due to Cytomine
-                        point = Point(float(row[1]), height - float(row[2]))
+                        point = Point(float(row_landmarks[1]), height - float(row_landmarks[2]))
 
                         a = Annotation(
                             location=point.wkt, id_image=image_id, id_project=params.id_project)
