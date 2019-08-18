@@ -1,0 +1,13 @@
+torch==1.0.1.post2
+setuptools==39.0.1
+tabulate==0.8.3
+torchvision==0.2.1
+pandas==0.24.1
+numpy==1.16.0
+scipy==1.1.0
+matplotlib==3.0.2
+psutil==5.6.3
+tqdm==4.32.2
+Pillow==6.1.0
+scikit_learn==0.21.3
+slice==0.2.0
