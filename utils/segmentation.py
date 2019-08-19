@@ -28,7 +28,7 @@ PIL -> Tensor: c,y,x
 Tensor -> Numpy: c,y,x (np.moveaxis(x, 0, 2) --> y,x,c)
 (where c is the channel index)
 
-PIL -> Tensor -> Numpy --> PIL: 
+PIL -> Tensor -> Numpy --> PIL:
     x = np.moveaxis(x, 0, 2)
     Image.fromarray(x.astype(np.uint8))
 """

@@ -39,7 +39,7 @@ def get_args():
 
     parser.add_argument('--path_to_patches', dest='path_to_patches',
                         default=Paths.PATH_TO_PATCHES,
-                        help="The path to the crops")
+                        help="The path to the patches")
 
     parser.add_argument('--info', dest='info',
                         default='./info/project-info.csv',
@@ -53,6 +53,11 @@ def get_args():
                         type=int,
                         default=300,
                         help="The size of the patches")
+    
+    parser.add_argument('--shift', dest='shift',
+                        type=int,
+                        default=75,
+                        help="The shift in pixels")
 
     parser.add_argument("--arch", dest='arch',
                         default='resnet50',
@@ -79,7 +84,7 @@ def get_args():
                         help="The path where the images are stored")
 
     parser.add_argument('--output', dest='output',
-                        default="./results/imagenet/2/visualize",
+                        default="visualize/imagenet/",
                         help="The path where the result image will be stored")
 
     parser.add_argument('--tissue', dest='tissue',
@@ -103,12 +108,17 @@ def get_args():
 
     parser.add_argument('--references', dest='references',
                         nargs='+', type=int,
-                        help='The number of the referent annotations',
+                        help='The number of the reference landmarks ',
                         default=[0])
 
     parser.add_argument('--angle', dest='angle',
                         type=int,
                         help='Indicates if the target image has to be rotated of <angle> degrees',
+                        default=None)
+
+    parser.add_argument('--data', dest='data',
+                        required=True,
+                        help='Path to the data containing the comparison results',
                         default=None)
 
     return parser.parse_args()
@@ -118,11 +128,10 @@ def main():
 
     args = get_args()
 
-    output_dir = "visualize/imagenet/{args.tissue}/"
-    mkdir(output_dir)
+    shift = args.shift
 
-    path_to_data = os.path.join(
-        args.data, args.distance, str(args.size), args.arch)
+    output_dir = f"visualize/imagenet/{args.tissue}/{args.distance}/{args.size}-{args.shift}"
+    mkdir(output_dir)
 
     counter = 0  # check that the dyes exist
 
@@ -160,12 +169,8 @@ def main():
         extension = ".png"
     path_to_target_image = os.path.join(path_to_images_dir, original_name + extension)
 
-    path_to_data = os.path.join(
-        path_to_data, f"{args.tissue}_{args.dye1}_{args.dye2}_{args.arch}_{args.size}_{args.pool}.data")
-
-    with open(path_to_data, "rb") as file_data:
+    with open(args.data, "rb") as file_data:
         data = pickle.load(file_data)
-        shift = data["args"]["shift"]
 
     results_comparison = data["results_comparison"]
 
@@ -252,7 +257,7 @@ def main():
         position_landmarks_dye = get_position_landmarks(
             args.tissue, original_name)
 
-        # Rotate the reference position too if needed
+        # Rotate the reference position if needed
         if args.angle is not None:
             position_reference = get_coordinates_after_rotation(
                 position_reference, args.angle, img_o.size, img_final.size, True)

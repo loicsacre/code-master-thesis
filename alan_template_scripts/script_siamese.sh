@@ -11,5 +11,3 @@
 
 srun python3 siamese/main.py --learning_rate "$1" --momentum "$2" --batch_size "$3" --margin "$4" --job_id "$SLURM_JOB_ID"
 
-# srun python3 siamese/main.py -t --checkpoint results/siamese/siameseAlexnet/checkpoints/siameseAlexnet_0.01_0.0_64-1203145.check
-

@@ -1,8 +1,11 @@
 #!/bin/bash
 
-size='600'
-shift='150'
+# Launch the second experiment for approach 1 with pre-trained network, size and shift 
+# parameters for the segmentation
 
-sbatch scripts/script_imagenet2.sh "$size" "$shift"
-# sbatch scripts/script_imagenet2-alexnet.sh
-# sbatch scripts/script_imagenet2-vgg19.sh
+size='300'
+shift='75'
+arch='densenet201'
+
+sbatch scripts/script_imagenet2.sh "$size" "$shift" "$densenet201"
+

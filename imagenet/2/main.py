@@ -61,6 +61,12 @@ def get_args():
                         euclidean distance with normalized vectors (eucl-norm) \
                         (default: cos)')
 
+    parser.add_argument('--resize', dest='resize',
+                        default=None,
+                        type=int,
+                        help="Indicates whether the patch must be resized to <resize> X <resize> \
+                        before going through the feature extractor")
+
     parser.add_argument('-pool', dest='pool',
                         action="store_true",
                         help="Indicates whether the pooling must be applied")
@@ -75,7 +81,14 @@ def get_args():
 def get_features(list_patches_img, normalize):
     """Return a numpy array of the features"""
 
-    features_extractor = FeaturesExtractor(arch=get_args().arch)
+    args = get_args()
+    arch = args.arch
+    pool = args.pool
+    resize = args.resize
+    if resize is None:
+        resize = args.size
+
+    features_extractor = FeaturesExtractor(arch=arch)
     features_extractor.set_normalize(normalize)  # Normalize according to dye
 
     features = np.zeros(len(list_patches_img), dtype=np.float32)
@@ -84,7 +97,7 @@ def get_features(list_patches_img, normalize):
 
         img = Image.fromarray(patch, mode='RGB')
         f = features_extractor.get_features_from_img(
-            img, get_args().size, get_args().pool).cpu().numpy()
+            img, resize, pool).cpu().numpy()
 
         if i == 0:
             features = np.zeros(
@@ -126,7 +139,7 @@ def main():
             start_time = time()
 
             output_filename = os.path.join(
-                args.output, f"data/{args.distance}/{args.size}/{args.arch}/{tissue}_{dye1}_{dye2}_{args.arch}_{args.size}_{args.pool}.data")
+                args.output, f"data/{args.distance}/{args.size}/{args.arch}/{tissue}_{dye1}_{dye2}_{args.arch}_{args.size}_{args.pool}_{args.resize}.data")
             if not os.path.exists(output_filename):
                 print(f"File {output_filename} does not exist")
                 mkdir(os.path.dirname(output_filename))
@@ -148,8 +161,8 @@ def main():
 
             # Get patches from image 2
             start_time_get_patches2 = time()
-            patches_img2 = segment_image(
-                images_path + original_name2 + extension, size=get_args().size, shift=shift)
+            patches_img2 = segment_image(os.path.join(
+                images_path, original_name2 + extension), size=get_args().size, shift=shift)
             time_get_patches2 = time() - start_time_get_patches2
 
             #################

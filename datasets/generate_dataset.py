@@ -226,6 +226,7 @@ def main():
 
     print(f"=> Total : {total}")
 
+    mkdir("./datasets/cnn/")
     with open("./datasets/cnn/dataset-networks.data", 'wb') as input_file:
         pickle.dump(dataset, input_file)
 

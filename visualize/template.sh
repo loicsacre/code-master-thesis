@@ -7,4 +7,4 @@ python3 visualize/visualize-results-imagenet.py \
     --arch densenet201 \
     --size 300 \
     --references 3 7 \
-
+    --data 'filename' (to be generated with imagenet/2/main.py)
