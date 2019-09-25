@@ -33,7 +33,7 @@ Two options offer to you:
 - _**Option 2:** step by step initialization_
 
 
-    - Run the setup file (with `python python3 setup.py install`)
+    - Run the setup file (with `python3 setup.py install`)
 
     - Get the images and landmarks and put them in the folder `./datasets` with the previously defined paths:
 
@@ -134,7 +134,7 @@ Usage examples:
 
 The code is in the `./siamese/` folder.
 
-Usage examples:
+Usage:
 - `python3 matchnet/main.py --arch siameseAlexnet --learning_rate 0.01  --momentum 0.9 --batch_size 64 --margin 0.5`
 
 ## Comparing both Approches on the Testing Set
