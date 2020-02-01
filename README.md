@@ -5,7 +5,7 @@
 
 ## :exclamation: Before going further :exclamation:
 
-- The code works with Python3 only and uses the Pytorch framework
+- The code works with Python (>= 3.7) only and uses the Pytorch framework
 
 - Call all the processes from the root of the project
 
