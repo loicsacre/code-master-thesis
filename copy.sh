@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Connect with ssh to a node and copy the dataset with which you would like to train
+# Connect with ssh to a node and copy the dataset on which you would like to train
 
 size='300'
 
