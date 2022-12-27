@@ -1,5 +1,5 @@
 torch==1.0.1.post2
-setuptools==39.0.1
+setuptools==65.5.1
 tabulate==0.8.3
 torchvision==0.2.1
 pandas==0.24.1
